@@ -10,6 +10,7 @@ services:
       - ./backend/.env
     depends_on:
       - n8n
+    restart: always
 
   n8n:
     image: n8nio/n8n
@@ -25,6 +26,7 @@ services:
       - N8N_PROTOCOL=http
     volumes:
       - n8n_data:/home/node/.n8n
+    restart: always
 
 volumes:
   n8n_data:
