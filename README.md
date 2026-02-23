@@ -24,6 +24,8 @@ When a new email is received:
    - Draft reply
 5. An analysis email is sent automatically
 6. The original message is marked as read
+   <img width="1376" height="477" alt="image" src="https://github.com/user-attachments/assets/19823557-5afd-4010-944f-66fea5a50906" />
+
 
 ---
 
@@ -38,25 +40,11 @@ When a new email is received:
 
 ---
 
-## Project Structure
+## Workflow Structure
+<img width="1403" height="762" alt="image" src="https://github.com/user-attachments/assets/35f96afa-4ad2-4c90-b3dc-25b60a33c6a8" />
 
 
-VectorFlow/
-│
-├── backend/
-│ ├── app/
-│ │ ├── agents/
-│ │ │ └── negotiation_agent.py
-│ │ ├── schemas/
-│ │ │ └── negotiation.py
-│ │ └── main.py
-│ ├── Dockerfile
-│ ├── requirements.txt
-│ └── .env
-│
-├── docker-compose.yml
-├── start_vectorflow.bat
-└── README.md
+
 
 
 ---
