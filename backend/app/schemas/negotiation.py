@@ -2,6 +2,10 @@ from pydantic import BaseModel
 from typing import List
 
 
+class NegotiationRequest(BaseModel):
+    thread: str
+
+
 class StrategyOption(BaseModel):
     name: str
     description: str
