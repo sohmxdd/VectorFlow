@@ -1,69 +1,78 @@
 import os
+from dotenv import load_dotenv
 from langchain_groq import ChatGroq
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import PydanticOutputParser
-from dotenv import load_dotenv
 
 from app.schemas.negotiation import NegotiationAnalysis
 
-# Load environment variables
 load_dotenv()
 
-# Initialize Groq LLM
 llm = ChatGroq(
     model=os.getenv("MODEL_NAME"),
     groq_api_key=os.getenv("GROQ_API_KEY"),
-    temperature=0.2,  # lower temp for analytical consistency
+    temperature=0.2,
 )
 
-# Structured output parser
 parser = PydanticOutputParser(pydantic_object=NegotiationAnalysis)
 
-# Enhanced strategic prompt
-prompt = ChatPromptTemplate.from_messages(
+analysis_prompt = ChatPromptTemplate.from_messages(
     [
         (
             "system",
             """
-You are a senior-level business negotiation strategist.
+You are a senior negotiation strategist.
 
-Your task is to analyze real-world business email negotiations and produce
-structured negotiation intelligence.
+Perform a deep strategic analysis of the email negotiation.
 
-Analytical Requirements:
-- Detect negotiation stage precisely (Opening, Counter, Concession, Deadlock, Closing).
-- Identify anchoring behavior and pricing pressure.
-- Detect BATNA signals (threats of alternatives).
-- Identify time-pressure leverage.
-- Evaluate power asymmetry between parties.
-- Extract leverage points and constraints separately.
-- Aggressive strategies must increase collapse risk.
-- Conservative strategies must lower collapse risk.
-- Ensure probability scores (0 to 1) are realistic and internally consistent.
+Analyze:
+- Exact negotiation stage
+- Tone progression across messages
+- Anchoring behavior
+- BATNA signals
+- Time-pressure leverage
+- Power asymmetry
+- Pricing psychology
+- Risk exposure
+
+Be detailed and analytical.
+Do NOT output JSON.
+Write structured strategic reasoning.
+"""
+        ),
+        (
+            "human",
+            "Email Thread:\n{thread}"
+        ),
+    ]
+)
+
+
+extraction_prompt = ChatPromptTemplate.from_messages(
+    [
+        (
+            "system",
+            """
+You are converting expert negotiation analysis into structured intelligence.
+
+Rules:
+- Follow schema strictly.
+- Probabilities must be between 0 and 1.
+- Aggressive strategies increase collapse risk.
+- Conservative strategies lower collapse risk.
 - overall_win_probability must align with recommended_strategy.
-- strategy_options probabilities must be logically coherent relative to each other.
-
-Think analytically before producing the final structured JSON.
-
-Return ONLY valid JSON matching the required schema.
+- Ensure logical consistency across strategy options.
+Return ONLY valid JSON.
 """
         ),
         (
             "human",
             """
-Email Thread:
-{thread}
+Based on the following expert analysis:
 
-Internally analyze:
-- Negotiation stage
-- Tone trend progression
-- Power balance
-- Anchoring and pricing dynamics
-- BATNA signals
-- Time leverage
-- Risk exposure
+{analysis}
 
-Then produce the final structured output.
+Produce structured negotiation intelligence.
 
 {format_instructions}
 """
@@ -73,11 +82,18 @@ Then produce the final structured output.
 
 
 def analyze_thread(thread: str) -> NegotiationAnalysis:
-    formatted_prompt = prompt.format_messages(
-        thread=thread,
+    
+    formatted_analysis_prompt = analysis_prompt.format_messages(thread=thread)
+    analysis_response = llm.invoke(formatted_analysis_prompt)
+
+    strategic_analysis = analysis_response.content
+
+    
+    formatted_extraction_prompt = extraction_prompt.format_messages(
+        analysis=strategic_analysis,
         format_instructions=parser.get_format_instructions(),
     )
 
-    response = llm.invoke(formatted_prompt)
+    extraction_response = llm.invoke(formatted_extraction_prompt)
 
-    return parser.parse(response.content)
+    return parser.parse(extraction_response.content)
