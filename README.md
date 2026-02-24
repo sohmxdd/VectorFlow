@@ -4,16 +4,8 @@
 
 ------------------------------------------------------------------------
 
-```{=html}
-<p align="center">
-```
-`<img src="https://img.shields.io/badge/FastAPI-Backend-green?style=for-the-badge&logo=fastapi" />`{=html}
-`<img src="https://img.shields.io/badge/n8n-Automation-orange?style=for-the-badge&logo=n8n" />`{=html}
-`<img src="https://img.shields.io/badge/Docker-Containerized-blue?style=for-the-badge&logo=docker" />`{=html}
-`<img src="https://img.shields.io/badge/License-MIT-black?style=for-the-badge" />`{=html}
-```{=html}
-</p>
-```
+<img width="1417" height="710" alt="image" src="https://github.com/user-attachments/assets/bbc85e71-a29e-4160-b71e-3c406370c055" />
+
 
 ------------------------------------------------------------------------
 
