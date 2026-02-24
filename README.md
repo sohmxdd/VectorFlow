@@ -1,16 +1,13 @@
-# VectorFlow
-
-### AI-Powered Negotiation Intelligence System
-
-------------------------------------------------------------------------
+# VectorFlow --- AI Negotiation Intelligence System
 
 ```{=html}
 <p align="center">
 ```
-`<img src="https://img.shields.io/badge/FastAPI-Backend-green?style=for-the-badge&logo=fastapi" />`{=html}
-`<img src="https://img.shields.io/badge/n8n-Automation-orange?style=for-the-badge&logo=n8n" />`{=html}
-`<img src="https://img.shields.io/badge/Docker-Containerized-blue?style=for-the-badge&logo=docker" />`{=html}
-`<img src="https://img.shields.io/badge/License-MIT-black?style=for-the-badge" />`{=html}
+`<img src="https://img.shields.io/badge/Python-3.11-111111?style=for-the-badge&logo=python&logoColor=white">`{=html}
+`<img src="https://img.shields.io/badge/FastAPI-Backend-111111?style=for-the-badge&logo=fastapi&logoColor=white">`{=html}
+`<img src="https://img.shields.io/badge/n8n-Automation-111111?style=for-the-badge&logo=n8n&logoColor=white">`{=html}
+`<img src="https://img.shields.io/badge/Docker-Containerized-111111?style=for-the-badge&logo=docker&logoColor=white">`{=html}
+`<img src="https://img.shields.io/badge/Status-Production_Ready-0f172a?style=for-the-badge&logo=vercel&logoColor=white">`{=html}
 ```{=html}
 </p>
 ```
@@ -19,152 +16,86 @@
 
 ## Overview
 
-VectorFlow is an AI-driven negotiation intelligence system that:
+VectorFlow is a fully automated AI-powered negotiation intelligence
+system.
 
--   Monitors incoming emails
--   Analyzes negotiation context using an LLM-powered backend
--   Generates structured negotiation insights
--   Drafts high-quality strategic responses
--   Automates workflows via n8n
--   Runs fully containerized using Docker
+It ingests live emails, analyzes negotiation dynamics using structured
+reasoning, generates strategy insights, and drafts optimized replies ---
+fully automated via FastAPI and n8n.
 
 ------------------------------------------------------------------------
 
-## Architecture Overview
+## Architecture
 
-``` mermaid
-flowchart LR
-    A[Gmail Trigger] --> B[n8n Workflow]
-    B --> C[FastAPI Backend]
-    C --> D[Negotiation Agent]
-    D --> E[Strategy Analysis + Draft Reply]
-    E --> F[Gmail Send Node]
-    F --> G[Mark as Read]
-```
-
-------------------------------------------------------------------------
-
-## System Components
-
-### 1. FastAPI Backend
-
--   Handles negotiation analysis requests
--   Structured response schema
--   Modular agent architecture
-
-### 2. Negotiation Agent
-
--   Detects negotiation stage
--   Assesses power balance
--   Calculates win probability
--   Estimates collapse risk
--   Generates strategy options
--   Produces draft reply
-
-### 3. n8n Automation
-
--   Gmail Trigger (Message Received)
--   HTTP Request → Backend `/analyze`
--   Send Response Email
--   Mark Original Email as Read
-
-### 4. Docker Infrastructure
-
--   Fully containerized backend + automation
--   Persistent n8n storage
--   Auto-restart on system reboot
+User Email\
+↓\
+Gmail Trigger (n8n)\
+↓\
+HTTP Request → FastAPI `/analyze`\
+↓\
+Negotiation Agent\
+↓\
+Strategy + Probabilities + Draft Reply\
+↓\
+Email Response (Automated)
 
 ------------------------------------------------------------------------
 
-## Request/Response Flow
+## Core Features
 
-``` mermaid
-sequenceDiagram
-    participant Gmail
-    participant n8n
-    participant FastAPI
-    participant Agent
-
-    Gmail->>n8n: New Email
-    n8n->>FastAPI: POST /analyze {thread}
-    FastAPI->>Agent: Analyze Context
-    Agent-->>FastAPI: Structured JSON
-    FastAPI-->>n8n: Strategy + Draft Reply
-    n8n->>Gmail: Send Analysis Email
-```
+-   Negotiation stage detection\
+-   Power balance analysis\
+-   Win probability & collapse risk scoring\
+-   Strategy recommendation engine\
+-   AI-generated draft replies\
+-   Fully containerized deployment\
+-   Persistent automation via n8n volume storage
 
 ------------------------------------------------------------------------
 
-## Example Backend Response
+## Tech Stack
 
-``` json
-{
-  "recommended_strategy": "Value-based counter-anchor",
-  "overall_win_probability": 0.72,
-  "collapse_risk": 0.14,
-  "draft_reply": "Thank you for the proposal..."
-}
-```
-
-------------------------------------------------------------------------
-
-## Project Structure
-
-    VectorFlow/
-    │
-    ├── backend/
-    │   ├── app/
-    │   │   ├── agents/
-    │   │   │   └── negotiation_agent.py
-    │   │   ├── schemas/
-    │   │   │   └── negotiation.py
-    │   │   ├── main.py
-    │   │   └── __init__.py
-    │   ├── Dockerfile
-    │   ├── requirements.txt
-    │   └── .env
-    │
-    ├── docker-compose.yml
-    └── start_vectorflow.bat
+  Layer              Technology
+  ------------------ ----------------
+  Backend            FastAPI
+  Automation         n8n
+  Containerization   Docker
+  Language           Python 3.11
+  Deployment         Docker Compose
 
 ------------------------------------------------------------------------
 
-## Local Deployment
+## How It Works
 
-### Start System
+1.  Incoming email triggers n8n workflow\
+2.  Email body sent to FastAPI `/analyze` endpoint\
+3.  Negotiation agent processes context\
+4.  System returns:
+    -   Recommended strategy\
+    -   Win probability\
+    -   Collapse risk\
+    -   Draft reply\
+5.  Automated response is sent\
+6.  Original email marked as read
+
+------------------------------------------------------------------------
+
+## Run Locally
 
 ``` bash
 docker compose up -d
 ```
 
-Or simply run:
-
-    start_vectorflow.bat
-
-Access:
-
--   FastAPI Docs → http://localhost:8000/docs
--   n8n UI → http://localhost:5678
+Access: - Backend → http://localhost:8000/docs - n8n →
+http://localhost:5678
 
 ------------------------------------------------------------------------
 
-## Design Principles
+## Production Notes
 
--   Modular agent-based architecture
--   Clear separation between automation and intelligence layers
--   Container-first deployment
--   Resume-grade production structure
--   Extensible to Slack, CRM, or enterprise pipelines
-
-------------------------------------------------------------------------
-
-## Future Improvements
-
--   Human-in-the-loop approval node
--   Vector database memory
--   Conversation-level strategy tracking
--   Cloud deployment (AWS/GCP/Azure)
--   Multi-channel integration
+-   Containers auto-restart (`restart: always`)
+-   n8n data persisted via Docker volume
+-   Single-command boot using start_vectorflow.bat
 
 ------------------------------------------------------------------------
 
@@ -174,4 +105,4 @@ MIT License
 
 ------------------------------------------------------------------------
 
-If this project helped you or inspired you, star this repo ⭐
+If you found this project valuable, ⭐ star this repo if you liked it.
